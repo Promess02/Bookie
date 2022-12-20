@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "631496815266",
+    "project_id": "readerapp-de8a9",
+    "storage_bucket": "readerapp-de8a9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:631496815266:android:095e4e212a1f2dec41ddfb",
+        "android_client_info": {
+          "package_name": "mikolaj.michalczyk.readerapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "631496815266-2o312ekp6qv1rsp5p0c154u5t8s56fbe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5rS8q7fMU8Fg9VUaMfsEuH1LyPvzufz4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "631496815266-2o312ekp6qv1rsp5p0c154u5t8s56fbe.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
