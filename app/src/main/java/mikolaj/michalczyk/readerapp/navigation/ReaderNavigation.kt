@@ -2,6 +2,7 @@ package mikolaj.michalczyk.readerapp.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -10,6 +11,7 @@ import androidx.navigation.navArgument
 import mikolaj.michalczyk.readerapp.screens.ReaderSplashScreen
 import mikolaj.michalczyk.readerapp.screens.details.BookDetailsScreen
 import mikolaj.michalczyk.readerapp.screens.home.HomeScreen
+import mikolaj.michalczyk.readerapp.screens.home.HomeScreenViewModel
 import mikolaj.michalczyk.readerapp.screens.login.LoginScreen
 import mikolaj.michalczyk.readerapp.screens.search.SearchScreen
 import mikolaj.michalczyk.readerapp.screens.stats.StatsUpdateScreen
@@ -24,7 +26,8 @@ fun ReaderNavigation() {
             ReaderSplashScreen(navController = navController)
         }
         composable(ReaderScreens.ReaderHomeScreen.name){
-            HomeScreen(navController = navController)
+            val homeViewMOdel = hiltViewModel<HomeScreenViewModel>()
+            HomeScreen(navController = navController, viewModel = homeViewMOdel)
         }
         composable(ReaderScreens.SearchScreen.name){
             SearchScreen(navController = navController)

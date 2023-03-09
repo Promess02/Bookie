@@ -1,11 +1,14 @@
-package mikolaj.michalczyk.readerapp.di
+package mikolaj.michalczyk.readerapp.screens.di
 
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestore.getInstance
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import mikolaj.michalczyk.readerapp.network.BooksAPI
 import mikolaj.michalczyk.readerapp.repository.BookRepository
+import mikolaj.michalczyk.readerapp.repository.FireRepository
 import mikolaj.michalczyk.readerapp.utils.Constants
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -14,6 +17,12 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+
+    @Singleton
+    @Provides
+    fun provideFireBookRepository()
+        = FireRepository(queryBook = FirebaseFirestore.getInstance().collection("books"))
+
     @Singleton
     @Provides
     fun provideBookRepository(api:BooksAPI) = BookRepository(api)

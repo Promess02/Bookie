@@ -1,6 +1,7 @@
 package mikolaj.michalczyk.readerapp.screens.home
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
@@ -15,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
 import mikolaj.michalczyk.readerapp.components.*
@@ -23,7 +25,7 @@ import mikolaj.michalczyk.readerapp.navigation.ReaderScreens
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun HomeScreen(navController: NavController) {
+fun HomeScreen(navController: NavController, viewModel: HomeScreenViewModel = hiltViewModel()) {
     Scaffold(topBar = {
         ReaderAppBar(title = "A.Reader", navController = navController)
     },
@@ -33,19 +35,23 @@ fun HomeScreen(navController: NavController) {
             }
         }) {
         Surface(modifier = Modifier.fillMaxSize()) {
-            HomeContent(navController)
+            HomeContent(navController, viewModel)
         }
     }
 }
 @Composable
-fun HomeContent(navController: NavController){
-    val listOfBooks = listOf<MBook>(
-        MBook(id = "dadsaa", title = " affafa", authors = "afsfa", notes = "afa sffa"),
-        MBook(id = "dadsaa", title = " affafa", authors = "afsfa", notes = "afa sffa"),
-        MBook(id = "dadsaa", title = " affafa", authors = "afsfa", notes = "afa sffa"),
-        MBook(id = "dadsaa", title = " affafa", authors = "afsfa", notes = "afa sffa"),
-        MBook(id = "dadsaa", title = " affafa", authors = "afsfa", notes = "afa sffa")
-    )
+fun HomeContent(navController: NavController, viewModel: HomeScreenViewModel = hiltViewModel()){
+
+    var listOfBooks = emptyList<MBook>()
+    val currentUser = FirebaseAuth.getInstance().currentUser
+
+    if(!viewModel.data.value.data.isNullOrEmpty()){
+        listOfBooks = viewModel.data.value.data!!.toList()!!.filter{
+            mBook ->
+            mBook.userId == currentUser?.uid.toString()
+        }
+        Log.d("Books", "HomeContent: ${listOfBooks.toString()}")
+    }
     val currentUserName = if(!FirebaseAuth.getInstance().currentUser?.email.isNullOrEmpty())
         FirebaseAuth.getInstance().currentUser?.email?.split("@")?.get(0)else "N/A"
     Column(Modifier.padding(2.dp),
