@@ -1,7 +1,7 @@
 package mikolaj.michalczyk.readerapp.screens.di
 
+
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.FirebaseFirestore.getInstance
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,7 +21,8 @@ object AppModule {
     @Singleton
     @Provides
     fun provideFireBookRepository()
-        = FireRepository(queryBook = FirebaseFirestore.getInstance().collection("books"))
+            = FireRepository(queryBook = FirebaseFirestore.getInstance()
+        .collection("books"))
 
     @Singleton
     @Provides

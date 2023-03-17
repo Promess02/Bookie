@@ -46,7 +46,7 @@ fun ListCard(book:MBook, onPressDetails: (String) -> Unit = {}) {
             horizontalAlignment = Alignment.Start) {
             Row(horizontalArrangement = Arrangement.Center) {
 
-                Image(painter = rememberImagePainter(data = "http://books.google.com/books/content?id=JUVjAgAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"),
+                Image(painter = rememberImagePainter(data = book.photoUrl.toString()),
                     contentDescription = "book image",
                     modifier = Modifier
                         .height(140.dp)
@@ -62,6 +62,7 @@ fun ListCard(book:MBook, onPressDetails: (String) -> Unit = {}) {
                         modifier = Modifier.padding(bottom = 1.dp))
 
                 }
+                BookRating(score = book.rating!!)
 
             }
             Text(text = book.title.toString(), modifier = Modifier.padding(4.dp),
@@ -75,7 +76,15 @@ fun ListCard(book:MBook, onPressDetails: (String) -> Unit = {}) {
         val isStartedReading = remember {
             mutableStateOf(false)
         }
+        Row(horizontalArrangement = Arrangement.End,
+            verticalAlignment = Alignment.Bottom) {
+            isStartedReading.value = book.startedReading != null
 
+
+            RoundedButton(label = if (isStartedReading.value)  "Reading" else "Not Yet",
+                radius = 70)
+
+        }
 
         }
 }

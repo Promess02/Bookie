@@ -180,7 +180,6 @@ fun showBookDetails(bookInfo: Resource<Item>, navController: NavController){
         }
 }
 
-
 fun saveToFirebase(book: MBook, navController: NavController) {
     val db = FirebaseFirestore.getInstance()
     val dbCollection = db.collection("books")
@@ -199,7 +198,5 @@ fun saveToFirebase(book: MBook, navController: NavController) {
             .addOnFailureListener {
                 Log.w("Error", "saveToFirebase: Error updating doc", it)
             }
-    }else{
-
     }
 }

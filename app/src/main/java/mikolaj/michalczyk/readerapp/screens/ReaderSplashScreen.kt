@@ -44,7 +44,6 @@ fun ReaderSplashScreen(navController: NavController){
         }else{
             navController.navigate(ReaderScreens.ReaderHomeScreen.name)
         }
-        navController.navigate(ReaderScreens.LoginScreen.name)
 
     }
     // animation
