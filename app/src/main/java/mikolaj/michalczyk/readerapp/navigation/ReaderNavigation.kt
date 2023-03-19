@@ -33,8 +33,8 @@ fun ReaderNavigation() {
             SearchScreen(navController = navController)
         }
         composable(ReaderScreens.StatsScreen.name){
-
-            StatsUpdateScreen(navController=navController)
+            val homeViewModel = hiltViewModel<HomeScreenViewModel>()
+            StatsUpdateScreen(navController=navController, viewModel = homeViewModel)
         }
         composable(ReaderScreens.UpdateScreen.name){
             UpdateScreen(navController=navController, bookItemId = it.toString())
