@@ -26,6 +26,7 @@ import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.google.firebase.auth.FirebaseAuth
 import mikolaj.michalczyk.readerapp.components.ReaderAppBar
+import mikolaj.michalczyk.readerapp.components.ReaderAppBarAlt
 import mikolaj.michalczyk.readerapp.model.Item
 import mikolaj.michalczyk.readerapp.model.MBook
 import mikolaj.michalczyk.readerapp.navigation.ReaderScreens
@@ -42,7 +43,7 @@ fun StatsUpdateScreen(navController: NavController, viewModel: HomeScreenViewMod
     val currentUser = FirebaseAuth.getInstance().currentUser
     
     Scaffold(topBar = {
-        ReaderAppBar(title = "Book Stats", icon = Icons.Default.ArrowBack,
+        ReaderAppBarAlt(title = "Book Stats", icon = Icons.Default.ArrowBack,
             navController = navController){
             navController.popBackStack()
         }

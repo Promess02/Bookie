@@ -35,6 +35,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import mikolaj.michalczyk.readerapp.components.InputField
 import mikolaj.michalczyk.readerapp.components.ReaderAppBar
+import mikolaj.michalczyk.readerapp.components.ReaderAppBarAlt
 import mikolaj.michalczyk.readerapp.components.RoundedButton
 import mikolaj.michalczyk.readerapp.data.Resource
 import mikolaj.michalczyk.readerapp.model.Item
@@ -61,7 +62,7 @@ fun formatCategories(categories: String):String{
 fun BookDetailsScreen(navController: NavController,
                       bookId: String, viewModel: DetailsViewModel = hiltViewModel()) {
     Scaffold(topBar = {
-        ReaderAppBar(
+        ReaderAppBarAlt(
             title = "Book Details", navController = navController,
             icon = Icons.Default.ArrowBack,
             showProfile = false
@@ -150,11 +151,6 @@ fun showBookDetails(bookInfo: Resource<Item>, navController: NavController){
             }
         }
 
-            InputField(valueState = textState, labelId = "Add a note:", isSingleLine = false,
-                onAction = KeyboardActions {
-                    if (textState.value.trim().isEmpty()) return@KeyboardActions
-                    keyboardController?.hide()
-                })
             Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically){
                 RoundedButton(label = "Save", radius = 30){
                     val book = MBook(

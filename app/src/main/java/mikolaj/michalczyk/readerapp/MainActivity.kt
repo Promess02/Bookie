@@ -37,8 +37,7 @@ class MainActivity : ComponentActivity() {
 fun ReaderApp(){
     Surface(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 46.dp),
+            .fillMaxSize(),
         color = MaterialTheme.colors.background
     ) {
         Column(verticalArrangement = Arrangement.Center,

@@ -22,6 +22,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.platform.LocalContext
@@ -41,6 +42,7 @@ import mikolaj.michalczyk.readerapp.data.DataOrException
 import mikolaj.michalczyk.readerapp.model.MBook
 import mikolaj.michalczyk.readerapp.navigation.ReaderScreens
 import mikolaj.michalczyk.readerapp.screens.home.HomeScreenViewModel
+import mikolaj.michalczyk.readerapp.utils.Constants.APP_GRADIENT
 import mikolaj.michalczyk.readerapp.utils.formatDate
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -50,7 +52,7 @@ fun UpdateScreen(navController: NavController, bookItemId: String,
                  viewModel: HomeScreenViewModel = hiltViewModel()) {
 
     Scaffold(topBar = {
-        ReaderAppBar(
+        ReaderAppBarAlt(
             title = "Update Book",
             icon = Icons.Default.ArrowBack,
             showProfile = false,
@@ -65,10 +67,11 @@ fun UpdateScreen(navController: NavController, bookItemId: String,
         
         Surface(modifier = Modifier
             .fillMaxSize()
-            .padding(3.dp)
         ) {
             Column(
-                modifier = Modifier.padding(top = 3.dp),
+                modifier = Modifier
+                    .background(brush = Brush.verticalGradient(APP_GRADIENT))
+                    .padding(top = 15.dp),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ){
@@ -77,20 +80,12 @@ fun UpdateScreen(navController: NavController, bookItemId: String,
                     LinearProgressIndicator()
                     bookInfo.loading = false
                 }else{
-                   Surface(modifier = Modifier
-                       .padding(2.dp)
-                       .fillMaxWidth(),
-                       shape = CircleShape,
-                       elevation = 4.dp
-                   ) {
                        ShowBookUpdate(bookInfo = viewModel.data.value, bookItemId = bookItemId)
-                   }
                     val BookToUpdate = viewModel.data.value.data?.first{ mBook ->
                         mBook.googleBookId == bookItemId
                     }!!
                     ShowSimpleForm(book = BookToUpdate, navController)
-                }
-
+                   }
 
             }
         }
@@ -194,7 +189,7 @@ fun ShowSimpleForm(book: MBook, navController: NavController) {
                Log.d("Info", "UpdateScreen: ${bookToUpdate.values}")
                FirebaseFirestore.getInstance()
                    .collection("books")
-                   .document(book.id!!)//todo napraw to jebane gówno, bo id sie pobiera null
+                   .document(book.id!!)
                    .update(bookToUpdate)
                    .addOnCompleteListener {
                        showToast(context, "Book Updated Successfully!")
@@ -254,8 +249,8 @@ fun SimpleForm(
                 .fillMaxWidth()
                 .height(140.dp)
                 .padding(3.dp)
-                .background(White, CircleShape)
-                .padding(horizontal = 20.dp, vertical = 12.dp),
+                .background(White, RoundedCornerShape(15))
+                .padding(horizontal = 8.dp, vertical = 5.dp),
 
             valueState = textFieldValue, labelId = "Enter your Thoughts",
         enabled = true, onAction = KeyboardActions{
@@ -275,9 +270,11 @@ fun ShowBookUpdate(bookInfo: DataOrException<List<MBook>, Boolean, Exception>, b
         Spacer(modifier = Modifier.width(43.dp))
         if(bookInfo.data != null){
             Column(modifier = Modifier.padding(4.dp), verticalArrangement = Arrangement.Center){
-                CardListItem(book = bookInfo.data!!.first{mBook ->  
+                val theBook = bookInfo.data!!.first{ mBook ->
                     mBook.googleBookId == bookItemId
-                },onPressDetails = {})
+                }
+                CardListItem(book = theBook,onPressDetails = {})
+                showBookInfo(book = theBook)
             }
         }
         
@@ -287,49 +284,38 @@ fun ShowBookUpdate(bookInfo: DataOrException<List<MBook>, Boolean, Exception>, b
 
 @Composable
 fun CardListItem(book: MBook, onPressDetails: () -> Unit) {
-    Card(modifier = Modifier
-        .padding(
-            start = 4.dp,
-            end = 4.dp,
-            top = 4.dp,
-            bottom = 8.dp
-        )
-        .clip(RoundedCornerShape(20.dp))
-        .clickable {},
-    elevation = 8.dp) {
-        Row(horizontalArrangement = Arrangement.Start) {
-            Image(painter = rememberImagePainter(data = book.photoUrl.toString()), contentDescription = null,
-                modifier = Modifier
-                    .height(100.dp)
-                    .width(120.dp)
-                    .padding(4.dp)
-                    .clip(
-                        RoundedCornerShape(
-                            topStart = 120.dp,
-                            topEnd = 20.dp,
-                            bottomEnd = 0.dp,
-                            bottomStart = 0.dp
-                        )
-                    ))
-            Column {
-                Text(text = book.title.toString(),
-                    style = MaterialTheme.typography.h6,
+            Card(shape = RoundedCornerShape(10)) {
+                Image(painter = rememberImagePainter(data = book.photoUrl.toString()), contentDescription = null,
                     modifier = Modifier
-                        .padding(start = 8.dp, end = 8.dp)
-                        .width(120.dp),
-                    fontWeight = FontWeight.SemiBold,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
-                )
-
-                Text(text = book.publishedData.toString(),
-                    style = MaterialTheme.typography.body2,
-                    modifier = Modifier.padding(start = 8.dp, end = 8.dp, bottom = 8.dp, top = 0.dp))
-
+                        .height(190.dp)
+                        .width(156.dp)
+                        .padding(4.dp)
+                        .clip(
+                            RoundedCornerShape(
+                                20.dp
+                            )
+                        ),
+                    alignment = Alignment.Center)
             }
 
-        }
+}
 
-        }
+@Composable
+fun showBookInfo(book: MBook){
+    Column{
+        Text(text = book.title.toString(),
+            style = MaterialTheme.typography.h6,
+            modifier = Modifier
+                .padding(start = 8.dp, end = 8.dp),
+            fontWeight = FontWeight.SemiBold,
+            maxLines = 3,
+            overflow = TextOverflow.Ellipsis
+        )
 
+        Text(text = book.publishedData.toString(),
+            style = MaterialTheme.typography.body2,
+            modifier = Modifier
+                .padding(start = 8.dp, end = 8.dp, bottom = 8.dp, top = 0.dp))
+
+    }
 }

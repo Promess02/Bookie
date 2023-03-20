@@ -2,6 +2,8 @@ package mikolaj.michalczyk.readerapp.screens.home
 
 import android.annotation.SuppressLint
 import android.util.Log
+import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
@@ -10,9 +12,12 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -21,21 +26,43 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import mikolaj.michalczyk.readerapp.components.*
 import mikolaj.michalczyk.readerapp.model.MBook
 import mikolaj.michalczyk.readerapp.navigation.ReaderScreens
+import mikolaj.michalczyk.readerapp.utils.Constants.APP_GRADIENT
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun HomeScreen(navController: NavController, viewModel: HomeScreenViewModel = hiltViewModel()) {
+    val scaffoldState = rememberScaffoldState()
+    val coroutineScope = rememberCoroutineScope()
+    val contextForToast = LocalContext.current.applicationContext
     Scaffold(topBar = {
-        ReaderAppBar(title = "A.Reader", navController = navController)
+        ReaderAppBar(title = "Bookie", navController = navController){
+            coroutineScope.launch {
+                scaffoldState.drawerState.open()
+            }
+        }
     },
         floatingActionButton = {
             FABContent {
                 navController.navigate(ReaderScreens.SearchScreen.name)
             }
-        }) {
+        },
+    drawerContent = {
+        DrawerContent{ itemLabel ->
+            Toast
+                .makeText(contextForToast, itemLabel, Toast.LENGTH_SHORT)
+                .show()
+            coroutineScope.launch {
+                // delay for the ripple effect
+                delay(timeMillis = 250)
+                scaffoldState.drawerState.close()
+            }
+        }
+    }) {
         Surface(modifier = Modifier.fillMaxSize()) {
             HomeContent(navController, viewModel)
         }
@@ -59,29 +86,11 @@ fun HomeContent(navController: NavController, viewModel: HomeScreenViewModel){
     val currentUserName = if (!email.isNullOrEmpty())
         FirebaseAuth.getInstance().currentUser?.email?.split("@")
             ?.get(0)else "N/A"
-    Column(Modifier.padding(2.dp),
+    Column(Modifier.background(brush = Brush.verticalGradient(APP_GRADIENT)),
     verticalArrangement = Arrangement.Top) {
         Row(modifier = Modifier.align(alignment = Alignment.Start)) {
             TitleSection(label = "Your reading \n " + "activity right now:")
             Spacer(modifier = Modifier.fillMaxWidth(0.7f))
-            Column {
-                Icon(imageVector = Icons.Filled.AccountCircle, contentDescription = "Profile",
-                modifier = Modifier
-                    .clickable {
-                        navController.navigate(ReaderScreens.StatsScreen.name)
-                    }
-                    .size(45.dp),
-                tint = MaterialTheme.colors.secondaryVariant)
-                Text(text = currentUserName!!,
-                modifier = Modifier.padding(2.dp),
-                style = MaterialTheme.typography.overline,
-                color = Color.Red,
-                fontSize = 15.sp,
-                maxLines = 1,
-                overflow = TextOverflow.Clip)
-                Divider()
-
-            }
         }
         ReadingRightNowArea(listOfBooks = listOfBooks,
             navController =navController )
@@ -143,8 +152,6 @@ fun HorizontalScrollableComponent(listOfBooks: List<MBook>,
             }
 
         }
-
-
 
     }
 

@@ -2,6 +2,7 @@ package mikolaj.michalczyk.readerapp.screens.search
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,6 +16,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontStyle
@@ -25,8 +27,10 @@ import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import mikolaj.michalczyk.readerapp.components.InputField
 import mikolaj.michalczyk.readerapp.components.ReaderAppBar
+import mikolaj.michalczyk.readerapp.components.ReaderAppBarAlt
 import mikolaj.michalczyk.readerapp.model.Item
 import mikolaj.michalczyk.readerapp.navigation.ReaderScreens
+import mikolaj.michalczyk.readerapp.utils.Constants.APP_GRADIENT
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -37,16 +41,15 @@ fun SearchScreen(navController: NavController,
 ) {
 
     Scaffold(topBar = {
-        ReaderAppBar(title = "Search Books",
+        ReaderAppBarAlt(title = "Search Books",
             icon = Icons.Default.ArrowBack,
             navController = navController,
             showProfile = false){
-            //navController.popBackStack()
             navController.navigate(ReaderScreens.ReaderHomeScreen.name)
         }
     }) {
         Surface() {
-            Column {
+            Column(modifier = Modifier.background(brush = Brush.verticalGradient(APP_GRADIENT))) {
                 SearchForm(
                     modifier = Modifier
                         .fillMaxWidth()

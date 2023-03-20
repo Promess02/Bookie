@@ -15,10 +15,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import mikolaj.michalczyk.readerapp.model.MBook
@@ -49,28 +51,27 @@ fun ListCard(book:MBook, onPressDetails: (String) -> Unit = {}) {
                 Image(painter = rememberImagePainter(data = book.photoUrl.toString()),
                     contentDescription = "book image",
                     modifier = Modifier
-                        .height(140.dp)
-                        .width(100.dp)
-                        .padding(4.dp))
-                Spacer(modifier = Modifier.width(50.dp))
+                        .height(160.dp)
+                        .width(130.dp)
+                        .padding(start = 10.dp, top = 13.dp))
+                Spacer(modifier = Modifier.width(5.dp))
 
-                Column(modifier = Modifier.padding(top = 25.dp),
+                Column(modifier = Modifier.padding(top = 20.dp),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally) {
                     Icon(imageVector = Icons.Rounded.FavoriteBorder,
                         contentDescription = "Fav Icon",
-                        modifier = Modifier.padding(bottom = 1.dp))
-
+                        modifier = Modifier.padding(bottom = 5.dp).scale(1.3f))
+                    BookRating(score = book.rating!!)
                 }
-                BookRating(score = book.rating!!)
 
             }
-            Text(text = book.title.toString(), modifier = Modifier.padding(4.dp),
+            Text(text = book.title.toString(), modifier = Modifier.padding(top = 5.dp, bottom = 2.dp, start = 5.dp),
                 fontWeight = FontWeight.Bold,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis)
 
-            Text(text = book.authors.toString(), modifier = Modifier.padding(4.dp),
+            Text(text = book.authors.toString(), modifier = Modifier.padding(top = 3.dp, start = 6.dp),
                 style = MaterialTheme.typography.caption) }
 
         val isStartedReading = remember {

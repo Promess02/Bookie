@@ -31,12 +31,12 @@ fun RoundedButton(
                 topStartPercent = radius
             )
         ),
-        color = Color(0xFF92CBDF)
+        color = Color(0xFFA872C5)
     ) {
         Column(
             modifier = Modifier
-                .width(90.dp)
-                .heightIn(40.dp)
+                .width(80.dp)
+                .heightIn(35.dp)
                 .clickable { onPress.invoke() },
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally

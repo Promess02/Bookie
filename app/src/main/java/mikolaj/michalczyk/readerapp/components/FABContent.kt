@@ -14,7 +14,7 @@ fun FABContent(onTap: () -> Unit) {
     FloatingActionButton(
         onClick = { onTap() },
         shape = RoundedCornerShape(50.dp),
-        backgroundColor = Color(0xFF92CBDF)
+        backgroundColor = Color(0xFFD8A3E7)
     ) {
         Icon(
             imageVector = Icons.Default.Add, contentDescription = "add",
