@@ -52,7 +52,7 @@ fun HomeScreen(navController: NavController, viewModel: HomeScreenViewModel = hi
             }
         },
     drawerContent = {
-        DrawerContent{ itemLabel ->
+        DrawerContent(navController = navController){ itemLabel ->
             Toast
                 .makeText(contextForToast, itemLabel, Toast.LENGTH_SHORT)
                 .show()

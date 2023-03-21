@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import mikolaj.michalczyk.readerapp.utils.Constants.APP_COLOR
 
 @Composable
 fun RoundedButton(
@@ -31,7 +32,7 @@ fun RoundedButton(
                 topStartPercent = radius
             )
         ),
-        color = Color(0xFFA872C5)
+        color = APP_COLOR
     ) {
         Column(
             modifier = Modifier
@@ -41,7 +42,7 @@ fun RoundedButton(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = label, style = TextStyle(color = Color.White), fontSize = 15.sp)
+            Text(text = label, style = TextStyle(color = Color.White, fontSize = 15.sp))
 
         }
 

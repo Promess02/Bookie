@@ -1,5 +1,6 @@
 package mikolaj.michalczyk.readerapp.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,13 +23,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
 import mikolaj.michalczyk.readerapp.R
+import mikolaj.michalczyk.readerapp.navigation.ReaderScreens
+import mikolaj.michalczyk.readerapp.utils.Constants.APP_GRADIENT
 
-@Preview
+
 @Composable
 fun DrawerContent(
-    gradientColors: List<Color> = listOf(Color(0xFFBA68C4), Color(0xFF123566)),
+    gradientColors: List<Color> = APP_GRADIENT,
+    navController: NavController,
     itemClick: (String) -> Unit = {}
 ) {
 
@@ -48,7 +53,10 @@ fun DrawerContent(
             Image(
                 modifier = Modifier
                     .size(size = 120.dp)
-                    .clip(shape = CircleShape),
+                    .clip(shape = CircleShape)
+                    .clickable{
+                              navController.navigate(ReaderScreens.StatsScreen.name)
+                    },
                 painter = painterResource(id = R.drawable.user),
                 contentDescription = "Profile Image"
             )
@@ -76,6 +84,9 @@ fun DrawerContent(
         items(itemsList) { item ->
             NavigationListItem(item = item) {
                 itemClick(item.label)
+                if(!item.screenName.isNullOrEmpty()){
+                    navController.navigate(item.screenName.toString())
+                }
             }
         }
     }
@@ -127,7 +138,8 @@ private fun prepareNavigationDrawerItems(): List<NavigationDrawerItem> {
     itemsList.add(
         NavigationDrawerItem(
             image = painterResource(id = R.drawable.ic_home),
-            label = "Home"
+            label = "Home",
+            screenName = ReaderScreens.ReaderHomeScreen.name
         )
     )
     itemsList.add(
@@ -138,14 +150,15 @@ private fun prepareNavigationDrawerItems(): List<NavigationDrawerItem> {
     )
     itemsList.add(
         NavigationDrawerItem(
-            image = painterResource(id = R.drawable.bell),
-            label = "Notifications",
+            image = painterResource(id = R.drawable.heart),
+            label = "Favorites",
         )
     )
     itemsList.add(
         NavigationDrawerItem(
             image = painterResource(id = R.drawable.user),
-            label = "Profile"
+            label = "Profile",
+            screenName = ReaderScreens.StatsScreen.name
         )
     )
     itemsList.add(
@@ -157,7 +170,8 @@ private fun prepareNavigationDrawerItems(): List<NavigationDrawerItem> {
     itemsList.add(
         NavigationDrawerItem(
             image = painterResource(id = R.drawable.log_out),
-            label = "Logout"
+            label = "Logout",
+            screenName = ReaderScreens.LoginScreen.name
         )
     )
     return itemsList
@@ -166,4 +180,5 @@ private fun prepareNavigationDrawerItems(): List<NavigationDrawerItem> {
 data class NavigationDrawerItem(
     val image: Painter,
     val label: String,
+    val screenName: String? = null,
 )

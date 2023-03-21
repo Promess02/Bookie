@@ -8,13 +8,14 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import mikolaj.michalczyk.readerapp.utils.Constants.APP_COLOR
 
 @Composable
 fun FABContent(onTap: () -> Unit) {
     FloatingActionButton(
         onClick = { onTap() },
         shape = RoundedCornerShape(50.dp),
-        backgroundColor = Color(0xFFD8A3E7)
+        backgroundColor = APP_COLOR
     ) {
         Icon(
             imageVector = Icons.Default.Add, contentDescription = "add",

@@ -1,7 +1,5 @@
 package mikolaj.michalczyk.readerapp.components
 
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Surface
@@ -11,13 +9,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import mikolaj.michalczyk.readerapp.utils.Constants.APP_COLOR
 
 @Composable
 fun TitleSection(modifier: Modifier = Modifier,
@@ -40,7 +37,7 @@ fun TitleSection(modifier: Modifier = Modifier,
             ) {
                 Text(
                     text = label,
-                    style = TextStyle(color = Color(0xFFA872C5)),
+                    style = TextStyle(color = APP_COLOR),
                     fontSize = 22.sp,
                     fontStyle = FontStyle.Italic,
                     textAlign = TextAlign.Left,
