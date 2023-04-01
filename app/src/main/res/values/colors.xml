@@ -11,4 +11,5 @@
     <color name="black">#FF000000</color>
     <color name="Brown">#7A481C</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="navBottomBar">#FFF0E5BD</color>
 </resources>

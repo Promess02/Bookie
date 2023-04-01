@@ -7,6 +7,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -107,7 +109,7 @@ fun BookRow(
         .fillMaxWidth()
         .height(100.dp)
         .padding(3.dp),
-        shape = RectangleShape,
+        shape = RoundedCornerShape(CornerSize(3.dp)),
         elevation = 7.dp) {
         Row(modifier = Modifier.padding(5.dp),
             verticalAlignment = Alignment.Top) {
@@ -124,28 +126,43 @@ fun BookRow(
             )
 
             Column {
-                Text(text = book.volumeInfo.title, overflow = TextOverflow.Ellipsis)
-                Text(text =  "Author: ${book.volumeInfo.authors}",
-                    overflow = TextOverflow.Clip,
-                    fontStyle = FontStyle.Italic,
-                    style = MaterialTheme.typography.caption)
+                val bookInfo = book.volumeInfo
+                if(!bookInfo.title.isNullOrEmpty()) {
+                    Text(text = bookInfo.title, overflow = TextOverflow.Ellipsis)
+                } else nullText()
 
-                Text(text =  "Date: ${book.volumeInfo.publishedDate}",
-                    overflow = TextOverflow.Clip,
-                    fontStyle = FontStyle.Italic,
-                    style = MaterialTheme.typography.caption)
+                if(!bookInfo.authors.isNullOrEmpty()){
+                    Text(text =  "Author: ${bookInfo.authors.toString().replace(Regex("[\\[\\]]"), "")}",
+                        overflow = TextOverflow.Clip,
+                        fontStyle = FontStyle.Italic,
+                        style = MaterialTheme.typography.caption)
+                } else nullText()
 
-                Text(text =  "${book.volumeInfo.categories}",
-                    overflow = TextOverflow.Clip,
-                    fontStyle = FontStyle.Italic,
-                    style = MaterialTheme.typography.caption)
 
+                if(!bookInfo.publishedDate.isNullOrEmpty()) {
+                    Text(text =  "Date: ${bookInfo.publishedDate.replace(Regex("[\\[\\]]"), "")}",
+                        overflow = TextOverflow.Clip,
+                        fontStyle = FontStyle.Italic,
+                        style = MaterialTheme.typography.caption)
+                } else nullText()
+
+
+                if(!bookInfo.categories.isNullOrEmpty()){
+                    Text(text = bookInfo.categories.toString().replace(Regex("[\\[\\]]"), ""),
+                        overflow = TextOverflow.Clip,
+                        fontStyle = FontStyle.Italic,
+                        style = MaterialTheme.typography.caption)
+                } else nullText()
             }
-
         }
-
     }
-
+}
+@Composable
+fun nullText(){
+    Text(text = "null",
+        overflow = TextOverflow.Clip,
+        fontStyle = FontStyle.Italic,
+        style = MaterialTheme.typography.caption)
 }
 
 
@@ -175,6 +192,4 @@ fun SearchForm(
             })
 
     }
-
-
 }

@@ -1,4 +1,4 @@
-package mikolaj.michalczyk.readerapp.screens.details
+package mikolaj.michalczyk.readerapp.screens.stats.details
 
 import android.annotation.SuppressLint
 import android.util.Log
@@ -6,15 +6,12 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -33,14 +30,11 @@ import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import mikolaj.michalczyk.readerapp.components.InputField
-import mikolaj.michalczyk.readerapp.components.ReaderAppBar
 import mikolaj.michalczyk.readerapp.components.ReaderAppBarAlt
 import mikolaj.michalczyk.readerapp.components.RoundedButton
 import mikolaj.michalczyk.readerapp.data.Resource
 import mikolaj.michalczyk.readerapp.model.Item
 import mikolaj.michalczyk.readerapp.model.MBook
-import mikolaj.michalczyk.readerapp.navigation.ReaderScreens
 
 fun formatCategories(categories: String):String{
     var l = 0
@@ -67,7 +61,7 @@ fun BookDetailsScreen(navController: NavController,
             icon = Icons.Default.ArrowBack,
             showProfile = false
         ){
-            navController.navigate(ReaderScreens.SearchScreen.name)
+            navController.popBackStack()
         }
     }) {
         Surface(modifier = Modifier
@@ -96,8 +90,10 @@ fun showBookDetails(bookInfo: Resource<Item>, navController: NavController){
     }
     val bookData = bookInfo.data?.volumeInfo
     val googleBookId = bookInfo.data?.id
-    val cleanDescription =
+    val cleanDescription = if(!bookData?.description.isNullOrEmpty()){
         bookInfo.data?.volumeInfo?.let { HtmlCompat.fromHtml(it.description,HtmlCompat.FROM_HTML_MODE_LEGACY).toString() }
+    }else "no description provided"
+
     if(bookData == null) {
         Row() {
             LinearProgressIndicator()
@@ -150,6 +146,7 @@ fun showBookDetails(bookInfo: Resource<Item>, navController: NavController){
                 }
             }
         }
+        Spacer(modifier = Modifier.height(15.dp))
 
             Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically){
                 RoundedButton(label = "Save", radius = 30){

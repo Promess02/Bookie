@@ -6,7 +6,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.*
@@ -80,7 +79,7 @@ fun UpdateScreen(navController: NavController, bookItemId: String,
                     LinearProgressIndicator()
                     bookInfo.loading = false
                 }else{
-                       ShowBookUpdate(bookInfo = viewModel.data.value, bookItemId = bookItemId)
+                       ShowBookUpdate(bookInfo = viewModel.data.value, bookItemId = bookItemId, navController = navController)
                     val BookToUpdate = viewModel.data.value.data?.first{ mBook ->
                         mBook.googleBookId == bookItemId
                     }!!
@@ -265,7 +264,11 @@ fun SimpleForm(
 }
 
 @Composable
-fun ShowBookUpdate(bookInfo: DataOrException<List<MBook>, Boolean, Exception>, bookItemId: String) {
+fun ShowBookUpdate(
+    bookInfo: DataOrException<List<MBook>, Boolean, Exception>,
+    bookItemId: String,
+    navController: NavController
+) {
     Row() {
         Spacer(modifier = Modifier.width(43.dp))
         if(bookInfo.data != null){
@@ -273,7 +276,9 @@ fun ShowBookUpdate(bookInfo: DataOrException<List<MBook>, Boolean, Exception>, b
                 val theBook = bookInfo.data!!.first{ mBook ->
                     mBook.googleBookId == bookItemId
                 }
-                CardListItem(book = theBook,onPressDetails = {})
+                CardListItem(book = theBook,onPressDetails = {
+                    navController.navigate(ReaderScreens.DetailScreen.name + "/${theBook.id}")
+                })
                 showBookInfo(book = theBook)
             }
         }
@@ -294,7 +299,8 @@ fun CardListItem(book: MBook, onPressDetails: () -> Unit) {
                             RoundedCornerShape(
                                 20.dp
                             )
-                        ),
+                        )
+                        .clickable { onPressDetails() },
                     alignment = Alignment.Center)
             }
 

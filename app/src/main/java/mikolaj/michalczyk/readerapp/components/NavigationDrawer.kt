@@ -1,6 +1,6 @@
 package mikolaj.michalczyk.readerapp.components
 
-import androidx.compose.foundation.BorderStroke
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -8,9 +8,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,9 +17,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -54,8 +53,8 @@ fun DrawerContent(
                 modifier = Modifier
                     .size(size = 120.dp)
                     .clip(shape = CircleShape)
-                    .clickable{
-                              navController.navigate(ReaderScreens.StatsScreen.name)
+                    .clickable {
+                        navController.navigate(ReaderScreens.StatsScreen.name)
                     },
                 painter = painterResource(id = R.drawable.user),
                 contentDescription = "Profile Image"
@@ -65,7 +64,7 @@ fun DrawerContent(
             Text(
                 modifier = Modifier
                     .padding(top = 12.dp),
-                text = user?.email.toString(),
+                text = user?.email.toString().split("@")[0],
                 fontSize = 26.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White

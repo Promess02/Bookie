@@ -71,7 +71,7 @@ fun ListCard(book:MBook, onPressDetails: (String) -> Unit = {}) {
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis)
 
-            Text(text = book.authors.toString(), modifier = Modifier.padding(top = 3.dp, start = 6.dp),
+            Text(text = book.authors.toString().replace(Regex("[\\[\\]]"), ""), modifier = Modifier.padding(top = 3.dp, start = 6.dp),
                 style = MaterialTheme.typography.caption) }
 
         val isStartedReading = remember {

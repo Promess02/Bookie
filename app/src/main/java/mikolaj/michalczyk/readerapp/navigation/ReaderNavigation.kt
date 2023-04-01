@@ -9,7 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import mikolaj.michalczyk.readerapp.screens.ReaderSplashScreen
-import mikolaj.michalczyk.readerapp.screens.details.BookDetailsScreen
+import mikolaj.michalczyk.readerapp.screens.stats.details.BookDetailsScreen
 import mikolaj.michalczyk.readerapp.screens.home.HomeScreen
 import mikolaj.michalczyk.readerapp.screens.home.HomeScreenViewModel
 import mikolaj.michalczyk.readerapp.screens.login.LoginScreen

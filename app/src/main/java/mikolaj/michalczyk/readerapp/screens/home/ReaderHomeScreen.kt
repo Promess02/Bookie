@@ -39,11 +39,13 @@ fun HomeScreen(navController: NavController, viewModel: HomeScreenViewModel = hi
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
     val contextForToast = LocalContext.current.applicationContext
-    Scaffold(topBar = {
-        ReaderAppBar(title = "Bookie", navController = navController){
+    Scaffold(
+        scaffoldState = scaffoldState,
+        topBar = {
+        ReaderAppBar(title = "Bookie", navController = navController) {
             coroutineScope.launch {
-                scaffoldState.drawerState.open()
-            }
+            scaffoldState.drawerState.open()
+          }
         }
     },
         floatingActionButton = {
@@ -168,7 +170,7 @@ fun ReadingRightNowArea(listOfBooks: List<MBook>,
     }
 
     HorizontalScrollableComponent(readingNowList){
-        Log.d("TAG", "BoolListArea: $it")
+        Log.d("TAG", "BookListArea: $it")
         navController.navigate(ReaderScreens.UpdateScreen.name + "/$it")
     }
 

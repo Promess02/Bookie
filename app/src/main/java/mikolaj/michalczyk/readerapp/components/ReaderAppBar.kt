@@ -32,11 +32,9 @@ import mikolaj.michalczyk.readerapp.R
 import mikolaj.michalczyk.readerapp.navigation.ReaderScreens
 @Composable
 fun ReaderAppBar(
-    icon: ImageVector? = null,
     title: String = "Bookie",
     showProfile: Boolean = true,
     navController: NavController,
-    onBackArrowClicked: () -> Unit = {},
     onNavIconClick: () -> Unit = {}
 ){
     TopAppBar(
@@ -47,13 +45,9 @@ fun ReaderAppBar(
                         painter = painterResource(id = R.drawable.ic_baseline_menu_book_24), contentDescription = "logo icon",
                         modifier = Modifier
                             .clip(RoundedCornerShape(12.dp))
-                            .scale(0.6f)
+                            .scale(0.8f)
                     )
 
-                }
-                if(icon!=null){
-                    Icon(imageVector = icon, contentDescription = "arrow Back", tint = Color.Red.copy(alpha = 0.7f),
-                    modifier = Modifier.clickable{onBackArrowClicked.invoke()})
                 }
                 Text(
                         text = title, color = Color.Red.copy(alpha = 0.7f),

@@ -1,7 +1,7 @@
 package mikolaj.michalczyk.readerapp.navigation
 
 import com.google.common.math.Stats
-import mikolaj.michalczyk.readerapp.screens.details.BookDetailsScreen
+import mikolaj.michalczyk.readerapp.screens.stats.details.BookDetailsScreen
 
 enum class ReaderScreens {
     SplashScreen,
