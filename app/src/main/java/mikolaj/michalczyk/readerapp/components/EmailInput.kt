@@ -19,7 +19,7 @@ fun EmailInput(modifier: Modifier = Modifier,
         modifier = modifier, valueState = emailState, labelId = labelId,
         enabled = enabled, keyboardType = KeyboardType.Email,
         imeAction = imeAction,
-        onAction = onAction
+        onAction = onAction,
     )
 
 }

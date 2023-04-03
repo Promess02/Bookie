@@ -27,6 +27,7 @@ fun LoginScreen(navController: NavController,
         Column(horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top) {
             ReaderLogo()
+            Spacer(modifier = Modifier.height(25.dp))
 
             if(showLoginForm.value) UserForm(loading = false, isCreateAccount = false){
                 email, password ->

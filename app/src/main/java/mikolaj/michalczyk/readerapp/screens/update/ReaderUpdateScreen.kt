@@ -11,6 +11,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
@@ -112,6 +113,10 @@ fun ShowSimpleForm(book: MBook, navController: NavController) {
     val ratingVal = remember{
         mutableStateOf(0)
     }
+
+    val favState = remember{
+        mutableStateOf(book.isFavourite)
+    }
     SimpleForm(defaultValue = if(book.notes.toString().isNotEmpty()) book.notes.toString()
     else "No thoughts available"){ note ->
         notesText.value = note
@@ -154,14 +159,21 @@ fun ShowSimpleForm(book: MBook, navController: NavController) {
         }
 
     }
-    Text(text = "Rating", modifier = Modifier.padding(bottom = 3.dp))
-    book.rating?.toInt().let { ratingNum ->
-        RatingBar(rating = ratingNum!!){ rating->
-            ratingVal.value = rating
-
+    Row(horizontalArrangement = Arrangement.SpaceBetween){
+        Column(horizontalAlignment = Alignment.CenterHorizontally){
+            Text(text = "Rating", modifier = Modifier.padding(bottom = 3.dp), fontWeight = FontWeight.SemiBold)
+            book.rating?.toInt().let { ratingNum ->
+                RatingBar(rating = ratingNum!!) { rating ->
+                    ratingVal.value = rating
+                }
+                Favicon(isFavourite = book.isFavourite!!){ isFav ->
+                    favState.value = isFav
+                }
+            }
         }
-
     }
+
+
     Spacer(modifier = Modifier.padding(bottom = 20.dp))
 
     Row(modifier = Modifier.padding(10.dp),
@@ -169,16 +181,18 @@ fun ShowSimpleForm(book: MBook, navController: NavController) {
     horizontalArrangement = Arrangement.Start) {
         val changedNotes = book.notes!= notesText.value
         val changedRating = book.rating?.toInt() != ratingVal.value
+        val changedFav = book.isFavourite != favState.value
         val isFinishedTimeStamp = if(isFinishedReading.value) Timestamp.now() else book.finishedReading
         val isStartedTimestamp = if(isStartedReading.value) Timestamp.now() else book.startedReading
 
-        val bookUpdate = changedNotes || changedRating || isStartedReading.value || isFinishedReading.value
+        val bookUpdate = changedNotes || changedRating || isStartedReading.value || isFinishedReading.value || changedFav
 
         val bookToUpdate = hashMapOf(
             "finished_reading" to isFinishedTimeStamp,
             "started_reading" to isStartedTimestamp,
             "rating" to ratingVal.value,
-            "notes" to notesText.value
+            "notes" to notesText.value,
+            "favourite" to favState.value
         ).toMap()
 
         RoundedButton(label = "Update", radius = 20, enabled = true){

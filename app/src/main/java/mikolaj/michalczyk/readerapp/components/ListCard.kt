@@ -1,5 +1,9 @@
 package mikolaj.michalczyk.readerapp.components
 
+import android.view.MotionEvent
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -10,21 +14,21 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.FavoriteBorder
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import mikolaj.michalczyk.readerapp.model.MBook
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ListCard(book:MBook, onPressDetails: (String) -> Unit = {}) {
     val context = LocalContext.current
@@ -61,7 +65,12 @@ fun ListCard(book:MBook, onPressDetails: (String) -> Unit = {}) {
                     horizontalAlignment = Alignment.CenterHorizontally) {
                     Icon(imageVector = Icons.Rounded.FavoriteBorder,
                         contentDescription = "Fav Icon",
-                        modifier = Modifier.padding(bottom = 5.dp).scale(1.3f))
+                        modifier = Modifier
+                            .padding(bottom = 5.dp)
+                            .size(58.dp)
+                        ,
+                    tint = if (book.isFavourite!!) Color(0xFFC043BE) else Color(0xFF4D5A5F)
+                    )
                     BookRating(score = book.rating!!)
                 }
 

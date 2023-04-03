@@ -11,6 +11,7 @@ enum class ReaderScreens {
     SearchScreen,
     DetailScreen,
     UpdateScreen,
+    FavouriteScreen,
     StatsScreen;
     companion object{
         fun fromRoute(route:String): ReaderScreens
@@ -22,6 +23,7 @@ enum class ReaderScreens {
             UpdateScreen.name -> UpdateScreen
             StatsScreen.name -> StatsScreen
             SearchScreen.name -> SearchScreen
+            FavouriteScreen.name -> FavouriteScreen
             null -> ReaderHomeScreen
             else -> throw IllegalArgumentException("Route $route is recognized")
         }

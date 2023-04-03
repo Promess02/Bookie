@@ -30,6 +30,7 @@ import coil.compose.rememberImagePainter
 import mikolaj.michalczyk.readerapp.components.InputField
 import mikolaj.michalczyk.readerapp.components.ReaderAppBar
 import mikolaj.michalczyk.readerapp.components.ReaderAppBarAlt
+import mikolaj.michalczyk.readerapp.components.nullText
 import mikolaj.michalczyk.readerapp.model.Item
 import mikolaj.michalczyk.readerapp.navigation.ReaderScreens
 import mikolaj.michalczyk.readerapp.utils.Constants.APP_GRADIENT
@@ -156,13 +157,6 @@ fun BookRow(
             }
         }
     }
-}
-@Composable
-fun nullText(){
-    Text(text = "null",
-        overflow = TextOverflow.Clip,
-        fontStyle = FontStyle.Italic,
-        style = MaterialTheme.typography.caption)
 }
 
 

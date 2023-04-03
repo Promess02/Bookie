@@ -151,6 +151,7 @@ private fun prepareNavigationDrawerItems(): List<NavigationDrawerItem> {
         NavigationDrawerItem(
             image = painterResource(id = R.drawable.heart),
             label = "Favorites",
+            screenName = ReaderScreens.FavouriteScreen.name
         )
     )
     itemsList.add(

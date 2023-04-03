@@ -152,16 +152,17 @@ fun showBookDetails(bookInfo: Resource<Item>, navController: NavController){
                 RoundedButton(label = "Save", radius = 30){
                     val book = MBook(
                         title = bookData.title.toString(),
-                    authors = bookData.authors.toString(),
-                    categories = formatCategories(bookData.categories.toString()),
-                    description = cleanDescription,
-                    notes = "",
-                    photoUrl = bookData.imageLinks?.thumbnail,
-                    publishedData = bookData.publishedDate,
-                    pageCount = bookData.pageCount.toString(),
-                    rating = 0.0,
-                    googleBookId = googleBookId,
-                    userId = FirebaseAuth.getInstance().currentUser?.uid.toString()
+                        authors = bookData.authors.toString(),
+                        notes = "",
+                        photoUrl = bookData.imageLinks?.thumbnail,
+                        categories = formatCategories(bookData.categories.toString()),
+                        publishedData = bookData.publishedDate,
+                        rating = 0.0,
+                        isFavourite = false,
+                        description = cleanDescription,
+                        pageCount = bookData.pageCount.toString(),
+                        userId = FirebaseAuth.getInstance().currentUser?.uid.toString(),
+                        googleBookId = googleBookId
                     )
                     saveToFirebase(book, navController)
                 }

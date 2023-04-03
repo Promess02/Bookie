@@ -1,15 +1,13 @@
-package mikolaj.michalczyk.readerapp.screens.stats
+package mikolaj.michalczyk.readerapp.screens.favourite
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.sharp.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,23 +23,23 @@ import mikolaj.michalczyk.readerapp.components.ReaderAppBarAlt
 import mikolaj.michalczyk.readerapp.components.nullText
 import mikolaj.michalczyk.readerapp.model.MBook
 import mikolaj.michalczyk.readerapp.screens.home.HomeScreenViewModel
+import mikolaj.michalczyk.readerapp.screens.stats.BookRowStats
 import mikolaj.michalczyk.readerapp.utils.formatDate
-import java.util.*
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun StatsUpdateScreen(navController: NavController, viewModel: HomeScreenViewModel = hiltViewModel())
-{
+fun FavouriteScreen(navController: NavController, viewModel: HomeScreenViewModel = hiltViewModel()) {
     var books: List<MBook>
     val currentUser = FirebaseAuth.getInstance().currentUser
-    
+
     Scaffold(topBar = {
         ReaderAppBarAlt(title = "Book Stats", icon = Icons.Default.ArrowBack,
             navController = navController){
             navController.popBackStack()
         }
-    }) {
-        Surface {
+    }){
+
+        Surface{
             books = if(!viewModel.data.value.data.isNullOrEmpty()){
                 viewModel.data.value.data!!.filter { mBook ->
                     (mBook.userId == currentUser?.uid)
@@ -49,75 +47,36 @@ fun StatsUpdateScreen(navController: NavController, viewModel: HomeScreenViewMod
             }else{
                 emptyList()
             }
-            Column {
-                Row() {
-                    Box(modifier = Modifier
-                        .size(45.dp)
-                        .padding(2.dp)) {
-                        Icon(imageVector = Icons.Sharp.Person, contentDescription = "icon")
-                    }
-                    Text(text = "Hi, ${currentUser?.email.toString().split("@")[0].uppercase(Locale.ROOT)}")
-                }
-                Card(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(4.dp),
-                    shape = CircleShape,
-                    elevation = 5.dp
-                ) {
-                    val readBooksList: List<MBook> = if(!viewModel.data.value.data.isNullOrEmpty()){
-                        books.filter{ mBook ->
-                            (mBook.userId == currentUser?.uid) && (mBook.finishedReading !=null)
-                        }
-                    }else{
-                        emptyList()
-                    }
+            val favBooksList = books.filter { book ->
+                book.isFavourite == true
+            }
 
-                    val readingBooks = books.filter{mbook ->
-                        (mbook.startedReading != null && mbook.finishedReading ==null)
-                    }
-
-                    Column(modifier = Modifier.padding(start = 25.dp,top = 4.dp, bottom = 4.dp),
-                        horizontalAlignment = Alignment.Start) {
-                        Text(text = "Your Stats", style = MaterialTheme.typography.h5)
-                        Divider()
-                        Text(text = "You are reading: ${readingBooks.size} books")
-                        Text(text = "You have read: ${readBooksList.size} books")
-
-                    }
-
+            Column{
+                Column(modifier = Modifier.padding(start = 25.dp,top = 4.dp, bottom = 4.dp),
+                    horizontalAlignment = Alignment.Start) {
+                    Text(text = "You have ${favBooksList.size}  favourite books")
                 }
                 if(viewModel.data.value.loading == true){
-                LinearProgressIndicator()
-            }else{
-                Divider()
-                LazyColumn(modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(),
-                    contentPadding = PaddingValues(16.dp)){
-                    val readBooks: List<MBook> = if(!viewModel.data.value.data.isNullOrEmpty()){
-                        viewModel.data.value.data!!.filter{mBook ->
-                            (mBook.userId == currentUser?.uid) && (mBook.finishedReading !=null)
+                    LinearProgressIndicator()
+                }else{
+                    Divider()
+                    LazyColumn(modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(),
+                        contentPadding = PaddingValues(16.dp)
+                    ){
+                        items(items = favBooksList){ mBook ->
+                            BookRowFav(book = mBook)
                         }
-                    }else{
-                        emptyList()
-                    }
-                    items(items = readBooks){ mBook ->
-                        BookRowStats(book = mBook)
-
                     }
                 }
             }
-            }
-
-
-            }
-
-        
+        }
     }
 }
 
 @Composable
-fun BookRowStats(
+fun BookRowFav(
     book: MBook) {
     Card(modifier = Modifier
         .fillMaxWidth()
@@ -140,24 +99,28 @@ fun BookRowStats(
             )
 
             Column {
+                if(!book.title.isNullOrEmpty()) {
                 Text(text = book.title.toString(), overflow = TextOverflow.Ellipsis)
+            } else nullText()
+
                 if (!book.authors.isNullOrEmpty()){
-                    Text(text =  "Author: ${book.authors.toString()}",
+                    Text(text =  "Author: ${book.authors.toString().replace(Regex("[\\[\\]]"), "")}",
                         overflow = TextOverflow.Clip,
                         fontStyle = FontStyle.Italic,
                         style = MaterialTheme.typography.caption)
                 } else nullText()
 
-                if(!book.startedReading?.toDate().toString().isNullOrEmpty()){
-                    Text(text =  "Started: ${formatDate(book.startedReading!!)}}",
-                        softWrap = true,
+
+                if(!book.publishedData.isNullOrEmpty()) {
+                    Text(text =  "Date: ${book.publishedData.toString().replace(Regex("[\\[\\]]"), "")}",
                         overflow = TextOverflow.Clip,
                         fontStyle = FontStyle.Italic,
                         style = MaterialTheme.typography.caption)
                 } else nullText()
 
-                if(!book.finishedReading?.toDate().toString().isNullOrEmpty()){
-                    Text(text =  "Finished: ${formatDate(book.finishedReading!!)}",
+
+                if(!book.categories.isNullOrEmpty()){
+                    Text(text = book.categories.toString().replace(Regex("[\\[\\]]"), ""),
                         overflow = TextOverflow.Clip,
                         fontStyle = FontStyle.Italic,
                         style = MaterialTheme.typography.caption)

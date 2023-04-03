@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import mikolaj.michalczyk.readerapp.screens.ReaderSplashScreen
+import mikolaj.michalczyk.readerapp.screens.favourite.FavouriteScreen
 import mikolaj.michalczyk.readerapp.screens.stats.details.BookDetailsScreen
 import mikolaj.michalczyk.readerapp.screens.home.HomeScreen
 import mikolaj.michalczyk.readerapp.screens.home.HomeScreenViewModel
@@ -26,8 +27,8 @@ fun ReaderNavigation() {
             ReaderSplashScreen(navController = navController)
         }
         composable(ReaderScreens.ReaderHomeScreen.name){
-            val homeViewMOdel = hiltViewModel<HomeScreenViewModel>()
-            HomeScreen(navController = navController, viewModel = homeViewMOdel)
+            val homeViewModel = hiltViewModel<HomeScreenViewModel>()
+            HomeScreen(navController = navController, viewModel = homeViewModel)
         }
         composable(ReaderScreens.SearchScreen.name){
             SearchScreen(navController = navController)
@@ -36,6 +37,12 @@ fun ReaderNavigation() {
             val homeViewModel = hiltViewModel<HomeScreenViewModel>()
             StatsUpdateScreen(navController=navController, viewModel = homeViewModel)
         }
+
+        composable(ReaderScreens.FavouriteScreen.name){
+            val homeViewModel = hiltViewModel<HomeScreenViewModel>()
+            FavouriteScreen(navController=navController, viewModel = homeViewModel)
+        }
+
         composable(ReaderScreens.UpdateScreen.name){
             UpdateScreen(navController=navController, bookItemId = it.toString())
         }

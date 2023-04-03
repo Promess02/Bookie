@@ -16,6 +16,7 @@ data class MBook(
     @get:PropertyName("published_date")
     @set:PropertyName("published_date")
     var publishedData: String? = null,
+    var isFavourite: Boolean? = null,
     var rating: Double? = null,
     var description: String? = null,
     @get:PropertyName("page_count")
