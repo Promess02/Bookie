@@ -290,9 +290,9 @@ fun ShowBookUpdate(
                 val theBook = bookInfo.data!!.first{ mBook ->
                     mBook.googleBookId == bookItemId
                 }
-                CardListItem(book = theBook,onPressDetails = {
+                CardListItem(book = theBook){
                     navController.navigate(ReaderScreens.DetailScreen.name + "/${theBook.id}")
-                })
+                }
                 showBookInfo(book = theBook)
             }
         }

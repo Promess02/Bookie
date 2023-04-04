@@ -6,6 +6,7 @@ object Constants {
     //https://www.googleapis.com/books/v1/volumes?q=android
     const val BASE_URL = "https://www.googleapis.com/books/v1/"
     val APP_GRADIENT: List<Color> = listOf(Color(0xFFE68D65), Color(0xFFF0E5BD))
+    val SIDE_GRADIENT: List<Color> = listOf(Color(0xFFC4A493),Color(0xFFF0E5BD))
     val APP_COLOR: Color = Color(0xFFA25138)
 
     val QUOTES_LIST: List<String> = listOf("There is no friend as loyal as a book",

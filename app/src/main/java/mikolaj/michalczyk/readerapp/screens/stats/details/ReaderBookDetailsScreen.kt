@@ -4,8 +4,10 @@ import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -16,11 +18,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -35,6 +39,7 @@ import mikolaj.michalczyk.readerapp.components.RoundedButton
 import mikolaj.michalczyk.readerapp.data.Resource
 import mikolaj.michalczyk.readerapp.model.Item
 import mikolaj.michalczyk.readerapp.model.MBook
+import mikolaj.michalczyk.readerapp.utils.Constants.SIDE_GRADIENT
 
 fun formatCategories(categories: String):String{
     var l = 0
@@ -65,16 +70,20 @@ fun BookDetailsScreen(navController: NavController,
         }
     }) {
         Surface(modifier = Modifier
-            .fillMaxSize()){
-            Column(modifier = Modifier.padding(top = 5.dp, start = 20.dp, end = 20.dp),
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.CenterHorizontally) {
+            .fillMaxSize()) {
+            Column(modifier = Modifier
+                .background(brush = Brush.verticalGradient(SIDE_GRADIENT))) {
+                Column(modifier = Modifier
+                    .padding(horizontal = 25.dp),
+                    verticalArrangement = Arrangement.Top,
+                    horizontalAlignment = Alignment.CenterHorizontally) {
+                    val bookInfo = produceState<Resource<Item>>(initialValue = Resource.Loading()){
+                        value = viewModel.getBookInfo(bookId)
+                    }.value
 
-                val bookInfo = produceState<Resource<Item>>(initialValue = Resource.Loading()){
-                    value = viewModel.getBookInfo(bookId)
-                }.value
+                    showBookDetails(bookInfo = bookInfo, navController = navController)
+                }
 
-                showBookDetails(bookInfo = bookInfo, navController = navController)
             }
 
         }
@@ -114,27 +123,28 @@ fun showBookDetails(bookInfo: Resource<Item>, navController: NavController){
             )
             Text(text = bookInfo.data.volumeInfo.title,
                 style = MaterialTheme.typography.h5, fontStyle = FontStyle.Normal,
+                fontWeight = FontWeight.SemiBold,
                 overflow = TextOverflow.Ellipsis
             )
             if (bookInfo.data.volumeInfo.authors.isNullOrEmpty()){} else{
                 val authors =  bookInfo.data.volumeInfo.authors.toString()
                 Text(text = "Authors: ${authors.substring(startIndex = 1, endIndex = authors.length-1)}",
-                    fontSize = 15.sp)
+                    style = MaterialTheme.typography.body2, fontWeight = FontWeight.SemiBold)
             }
             if(bookInfo.data.volumeInfo.categories.isNullOrEmpty()){ }
             else{
                 val formattedCategories = formatCategories(bookInfo.data.volumeInfo.categories.toString())
                 Text(text = "Categories: $formattedCategories",
-                    fontSize = 15.sp)
+                    style = MaterialTheme.typography.body2, fontWeight = FontWeight.SemiBold)
             }
             Text(text = "Published: ${bookInfo.data.volumeInfo.publishedDate}",
-                fontSize = 15.sp)
+                style = MaterialTheme.typography.caption)
         if(bookInfo.data.volumeInfo.description.isNullOrEmpty()){}
         else{
             val localDims = LocalContext.current.resources.displayMetrics
             Surface(modifier = Modifier
                 .height(localDims.heightPixels.dp.times(0.09f))
-                .padding(4.dp), shape = RectangleShape, border = BorderStroke(width = 1.dp, Color.Blue)) {
+                .padding(4.dp), shape = RoundedCornerShape(8.dp), border = BorderStroke(width = 1.dp, Color.Blue)) {
                 LazyColumn(modifier = Modifier
                     .padding(3.dp)
                     .height(200.dp)){

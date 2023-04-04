@@ -99,15 +99,6 @@ fun ReaderAppBarAlt(
     TopAppBar(
         title = {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                if (showProfile) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_baseline_menu_book_24), contentDescription = "logo icon",
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(12.dp))
-                            .scale(0.6f)
-                    )
-
-                }
                 if(icon!=null){
                     Icon(imageVector = icon, contentDescription = "arrow Back", tint = Color.Red.copy(alpha = 0.7f),
                         modifier = Modifier.clickable{onBackArrowClicked.invoke()})
