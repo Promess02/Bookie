@@ -11,7 +11,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
@@ -81,12 +80,11 @@ fun UpdateScreen(navController: NavController, bookItemId: String,
                     bookInfo.loading = false
                 }else{
                        ShowBookUpdate(bookInfo = viewModel.data.value, bookItemId = bookItemId, navController = navController)
-                    val BookToUpdate = viewModel.data.value.data?.first{ mBook ->
+                    val bookToUpdate = viewModel.data.value.data?.first{ mBook ->
                         mBook.googleBookId == bookItemId
                     }!!
-                    ShowSimpleForm(book = BookToUpdate, navController)
+                    ShowSimpleForm(book = bookToUpdate, navController)
                    }
-
             }
         }
 
@@ -117,8 +115,9 @@ fun ShowSimpleForm(book: MBook, navController: NavController) {
     val favState = remember{
         mutableStateOf(book.isFavourite)
     }
-    SimpleForm(defaultValue = if(book.notes.toString().isNotEmpty()) book.notes.toString()
-    else "No thoughts available"){ note ->
+    SimpleForm(
+        defaultValue = book.notes.toString().ifEmpty { "No thoughts available" }
+    ){ note ->
         notesText.value = note
 
     }
@@ -245,12 +244,10 @@ fun ShowSimpleForm(book: MBook, navController: NavController) {
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SimpleForm(
-    modifier: Modifier = Modifier,
-    loading: Boolean = false,
     defaultValue: String = "Great Book! ",
     onSearch: (String) -> Unit
 ) {
-    Column() {
+    Column {
         val textFieldValue = rememberSaveable{ mutableStateOf(defaultValue)}
         val keyboardController = LocalSoftwareKeyboardController.current
         val valid = remember(textFieldValue.value){
@@ -283,7 +280,7 @@ fun ShowBookUpdate(
     bookItemId: String,
     navController: NavController
 ) {
-    Row() {
+    Row {
         Spacer(modifier = Modifier.width(43.dp))
         if(bookInfo.data != null){
             Column(modifier = Modifier.padding(4.dp), verticalArrangement = Arrangement.Center){
@@ -293,7 +290,7 @@ fun ShowBookUpdate(
                 CardListItem(book = theBook){
                     navController.navigate(ReaderScreens.DetailScreen.name + "/${theBook.id}")
                 }
-                showBookInfo(book = theBook)
+                ShowBookInfo(book = theBook)
             }
         }
         
@@ -321,7 +318,7 @@ fun CardListItem(book: MBook, onPressDetails: () -> Unit) {
 }
 
 @Composable
-fun showBookInfo(book: MBook){
+fun ShowBookInfo(book: MBook){
     Column{
         Text(text = book.title.toString(),
             style = MaterialTheme.typography.h6,

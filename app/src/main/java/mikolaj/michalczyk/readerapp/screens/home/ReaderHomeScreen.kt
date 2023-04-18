@@ -77,13 +77,9 @@ fun HomeContent(navController: NavController, viewModel: HomeScreenViewModel){
             mBook.userId == currentUser?.uid.toString()
         }
 
-        Log.d("Books", "HomeContent: ${listOfBooks.toString()}")
+        Log.d("Books", "HomeContent: $listOfBooks")
     }
 
-    val email = FirebaseAuth.getInstance().currentUser?.email
-    val currentUserName = if (!email.isNullOrEmpty())
-        FirebaseAuth.getInstance().currentUser?.email?.split("@")
-            ?.get(0)else "N/A"
     Column(Modifier.background(brush = Brush.verticalGradient(APP_GRADIENT)),
     verticalArrangement = Arrangement.Top) {
         Row(modifier = Modifier.align(alignment = Alignment.Start)) {
@@ -129,7 +125,7 @@ fun HorizontalScrollableComponent(listOfBooks: List<MBook>,
             LinearProgressIndicator()
 
         }else {
-            if (listOfBooks.isNullOrEmpty()){
+            if (listOfBooks.isEmpty()){
                 Surface(modifier = Modifier.padding(23.dp)) {
                     Text(text = "No books found. Add a Book",
                         style = TextStyle(

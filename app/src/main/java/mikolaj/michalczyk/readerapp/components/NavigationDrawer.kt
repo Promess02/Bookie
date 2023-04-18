@@ -35,7 +35,7 @@ fun DrawerContent(
     navController: NavController,
     itemClick: (String) -> Unit = {}
 ) {
-
+    val contextForToast = LocalContext.current.applicationContext
     val itemsList = prepareNavigationDrawerItems()
     val user = FirebaseAuth.getInstance().currentUser
     LazyColumn(
@@ -83,9 +83,8 @@ fun DrawerContent(
         items(itemsList) { item ->
             NavigationListItem(item = item) {
                 itemClick(item.label)
-                if(!item.screenName.isNullOrEmpty()){
-                    navController.navigate(item.screenName.toString())
-                }
+                if(!item.screenName.isNullOrEmpty()) navController.navigate(item.screenName.toString())
+                else Toast.makeText(contextForToast, "Screen not yet available", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -106,7 +105,6 @@ private fun NavigationListItem(
         verticalAlignment = Alignment.CenterVertically
     ) {
 
-        // icon and unread bubble
         Box {
             Icon(
                 modifier = Modifier

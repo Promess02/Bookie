@@ -12,22 +12,16 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.core.text.HtmlCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -41,21 +35,7 @@ import mikolaj.michalczyk.readerapp.model.Item
 import mikolaj.michalczyk.readerapp.model.MBook
 import mikolaj.michalczyk.readerapp.utils.Constants.SIDE_GRADIENT
 
-fun formatCategories(categories: String):String{
-    var l = 0
-    var i = 0
-    while (l<=3){
-        if(i+1==categories.length){
-            break
-            return categories.substring(1,i)
-        };
-        if(categories[i]=='/') l++
-        i++
-    }
-    return categories.substring(1,i-2)
-}
 
-@OptIn(ExperimentalComposeUiApi::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun BookDetailsScreen(navController: NavController,
@@ -81,7 +61,7 @@ fun BookDetailsScreen(navController: NavController,
                         value = viewModel.getBookInfo(bookId)
                     }.value
 
-                    showBookDetails(bookInfo = bookInfo, navController = navController)
+                    ShowBookDetails(bookInfo = bookInfo, navController = navController)
                 }
 
             }
@@ -91,12 +71,10 @@ fun BookDetailsScreen(navController: NavController,
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
+
 @Composable
-fun showBookDetails(bookInfo: Resource<Item>, navController: NavController){
-    val textState = rememberSaveable{
-        mutableStateOf("")
-    }
+fun ShowBookDetails(bookInfo: Resource<Item>, navController: NavController){
+
     val bookData = bookInfo.data?.volumeInfo
     val googleBookId = bookInfo.data?.id
     val cleanDescription = if(!bookData?.description.isNullOrEmpty()){
@@ -104,13 +82,12 @@ fun showBookDetails(bookInfo: Resource<Item>, navController: NavController){
     }else "no description provided"
 
     if(bookData == null) {
-        Row() {
+        Row {
             LinearProgressIndicator()
             Text(text = "Loading...")
         }
     }
     else{
-            val keyboardController = LocalSoftwareKeyboardController.current
             val imageUrl = if(bookInfo.data.volumeInfo.imageLinks != null) bookInfo.data.volumeInfo.imageLinks.thumbnail
             else "https://images.unsplash.com/photo-1541963463532-d68292c34b19?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=80&q=80"
             Image(
@@ -126,19 +103,25 @@ fun showBookDetails(bookInfo: Resource<Item>, navController: NavController){
                 fontWeight = FontWeight.SemiBold,
                 overflow = TextOverflow.Ellipsis
             )
-            if (bookInfo.data.volumeInfo.authors.isNullOrEmpty()){} else{
+            if (bookInfo.data.volumeInfo.authors.isNullOrEmpty()) Text(text = "Authors: no authors found",
+                style = MaterialTheme.typography.body2, fontWeight = FontWeight.SemiBold)
+            else{
                 val authors =  bookInfo.data.volumeInfo.authors.toString()
                 Text(text = "Authors: ${authors.substring(startIndex = 1, endIndex = authors.length-1)}",
                     style = MaterialTheme.typography.body2, fontWeight = FontWeight.SemiBold)
             }
-            if(bookInfo.data.volumeInfo.categories.isNullOrEmpty()){ }
+            if(bookInfo.data.volumeInfo.categories.isNullOrEmpty()) Text(text = "Categories: no categories found",
+                style = MaterialTheme.typography.body2, fontWeight = FontWeight.SemiBold)
             else{
-                val formattedCategories = formatCategories(bookInfo.data.volumeInfo.categories.toString())
+                val formattedCategories = bookInfo.data.volumeInfo.categories.toString().replace(Regex("[\\[\\]]"), "")
                 Text(text = "Categories: $formattedCategories",
                     style = MaterialTheme.typography.body2, fontWeight = FontWeight.SemiBold)
             }
-            Text(text = "Published: ${bookInfo.data.volumeInfo.publishedDate}",
+        if(bookInfo.data.volumeInfo.publishedDate.isNullOrEmpty()) Text(text = "Published: No date found",
+            style = MaterialTheme.typography.caption)
+            else Text(text = "Published: ${bookInfo.data.volumeInfo.publishedDate}",
                 style = MaterialTheme.typography.caption)
+
         if(bookInfo.data.volumeInfo.description.isNullOrEmpty()){}
         else{
             val localDims = LocalContext.current.resources.displayMetrics
@@ -161,11 +144,11 @@ fun showBookDetails(bookInfo: Resource<Item>, navController: NavController){
             Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically){
                 RoundedButton(label = "Save", radius = 30){
                     val book = MBook(
-                        title = bookData.title.toString(),
+                        title = bookData.title,
                         authors = bookData.authors.toString(),
                         notes = "",
                         photoUrl = bookData.imageLinks?.thumbnail,
-                        categories = formatCategories(bookData.categories.toString()),
+                        categories = bookData.categories.toString().replace(Regex("[\\[\\]]"), ""),
                         publishedData = bookData.publishedDate,
                         rating = 0.0,
                         isFavourite = false,

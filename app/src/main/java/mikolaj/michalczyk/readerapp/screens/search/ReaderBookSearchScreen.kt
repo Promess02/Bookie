@@ -13,13 +13,14 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
@@ -28,7 +29,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import mikolaj.michalczyk.readerapp.components.InputField
-import mikolaj.michalczyk.readerapp.components.ReaderAppBar
 import mikolaj.michalczyk.readerapp.components.ReaderAppBarAlt
 import mikolaj.michalczyk.readerapp.components.nullText
 import mikolaj.michalczyk.readerapp.model.Item
@@ -51,12 +51,9 @@ fun SearchScreen(navController: NavController,
             navController.navigate(ReaderScreens.ReaderHomeScreen.name)
         }
     }) {
-        Surface() {
+        Surface {
             Column(modifier = Modifier.background(brush = Brush.verticalGradient(APP_GRADIENT))) {
-                SearchForm(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)){ searchQuery ->
+                SearchForm { searchQuery ->
                     viewModel.searchBooks(query = searchQuery)
 
                 }
@@ -163,10 +160,8 @@ fun BookRow(
 @ExperimentalComposeUiApi
 @Composable
 fun SearchForm(
-    modifier: Modifier = Modifier,
-    loading: Boolean = false,
-    hint: String = "Search",
-    onSearch: (String) -> Unit = {}) {
+    onSearch: (String) -> Unit = {}
+) {
     Column {
         val searchQueryState = rememberSaveable { mutableStateOf("") }
         val keyboardController = LocalSoftwareKeyboardController.current

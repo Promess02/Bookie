@@ -11,12 +11,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.sharp.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -31,7 +29,6 @@ import mikolaj.michalczyk.readerapp.components.ReaderAppBarAlt
 import mikolaj.michalczyk.readerapp.components.nullText
 import mikolaj.michalczyk.readerapp.model.MBook
 import mikolaj.michalczyk.readerapp.screens.home.HomeScreenViewModel
-import mikolaj.michalczyk.readerapp.screens.stats.details.formatCategories
 import mikolaj.michalczyk.readerapp.utils.Constants.APP_COLOR
 import mikolaj.michalczyk.readerapp.utils.formatDate
 import java.util.*
@@ -211,7 +208,7 @@ fun StatsUpdateScreenPreview()
             authors = "afsfsasaf",
             notes = "",
             photoUrl = "https://images.unsplash.com/photo-1541963463532-d68292c34b19?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=80&q=80",
-            categories = formatCategories("gaassafafs"),
+            categories = "gaassafafs",
             publishedData = "affasfasf",
             rating = 0.0,
             isFavourite = false,
