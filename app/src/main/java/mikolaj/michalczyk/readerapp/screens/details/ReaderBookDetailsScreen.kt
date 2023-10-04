@@ -1,4 +1,4 @@
-package mikolaj.michalczyk.readerapp.screens.stats.details
+package mikolaj.michalczyk.readerapp.screens.details
 
 import android.annotation.SuppressLint
 import android.util.Log

@@ -31,6 +31,4 @@ class BookRepository @Inject constructor(private val api: BooksAPI) {
         return Resource.Success(data = response)
     }
 
-
-
 }

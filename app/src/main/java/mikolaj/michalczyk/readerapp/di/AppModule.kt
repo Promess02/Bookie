@@ -1,4 +1,4 @@
-package mikolaj.michalczyk.readerapp.screens.di
+package mikolaj.michalczyk.readerapp.di
 
 
 import com.google.firebase.firestore.FirebaseFirestore

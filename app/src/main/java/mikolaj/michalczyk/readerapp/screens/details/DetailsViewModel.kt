@@ -1,4 +1,4 @@
-package mikolaj.michalczyk.readerapp.screens.stats.details
+package mikolaj.michalczyk.readerapp.screens.details
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

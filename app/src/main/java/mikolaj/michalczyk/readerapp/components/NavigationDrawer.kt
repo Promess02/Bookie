@@ -155,8 +155,8 @@ private fun prepareNavigationDrawerItems(): List<NavigationDrawerItem> {
     itemsList.add(
         NavigationDrawerItem(
             image = painterResource(id = R.drawable.user),
-            label = "Profile",
-            screenName = ReaderScreens.StatsScreen.name
+            label = "Friends",
+            screenName = ReaderScreens.FriendsScreen.name
         )
     )
     itemsList.add(

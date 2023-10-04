@@ -31,6 +31,7 @@ import mikolaj.michalczyk.readerapp.model.MBook
 import mikolaj.michalczyk.readerapp.screens.home.HomeScreenViewModel
 import mikolaj.michalczyk.readerapp.utils.Constants.APP_COLOR
 import mikolaj.michalczyk.readerapp.utils.formatDate
+import java.text.SimpleDateFormat
 import java.util.*
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -149,6 +150,8 @@ fun BookRowStats(
         Row(modifier = Modifier.padding(5.dp),
             verticalAlignment = Alignment.Top) {
 
+            val dateFormat = SimpleDateFormat("dd.MM.yyyy")
+
             val imageUrl = if(book.photoUrl.toString().isEmpty()) "https://images.unsplash.com/photo-1541963463532-d68292c34b19?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=80&q=80"
             else book.photoUrl.toString()
             Image(
@@ -170,25 +173,22 @@ fun BookRowStats(
                         style = MaterialTheme.typography.caption)
                 } else nullText()
 
-                if(!book.startedReading?.toDate().toString().isNullOrEmpty()){
-                    Text(text =  "Started: ${formatDate(book.startedReading!!)}}",
+                if(book.startedReading!=null){
+                    Text(text =  "Started: ${dateFormat.format(book.startedReading!!.toDate())}",
                         softWrap = true,
                         overflow = TextOverflow.Clip,
                         fontStyle = FontStyle.Italic,
                         style = MaterialTheme.typography.caption)
                 } else nullText()
 
-                if(!book.finishedReading?.toDate().toString().isNullOrEmpty()){
-                    Text(text =  "Finished: ${formatDate(book.finishedReading!!)}",
+                if(book.finishedReading!=null){
+                    Text(text =  "Finished: ${dateFormat.format(book.finishedReading!!.toDate())}",
                         overflow = TextOverflow.Clip,
                         fontStyle = FontStyle.Italic,
                         style = MaterialTheme.typography.caption)
                 } else nullText()
-
             }
-
         }
-
     }
 
 }

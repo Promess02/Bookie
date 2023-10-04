@@ -161,12 +161,9 @@ fun ReadingRightNowArea(listOfBooks: List<MBook>,
         mBook.startedReading != null && mBook.finishedReading == null
     }
 
-    HorizontalScrollableComponent(readingNowList){
+    HorizontalScrollableComponent(readingNowList) {
         Log.d("TAG", "BookListArea: $it")
         navController.navigate(ReaderScreens.UpdateScreen.name + "/$it")
     }
-
-
-
 }
 
